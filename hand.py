@@ -42,3 +42,18 @@ class Hand:
 
     def is_empty(self):
         return len(self.suits) == 0
+
+    def get_last(self, suit: Suit, wing: int) -> Card:
+        """
+        Возвращает последнюю карту заданной масти в заданном крыле на руке
+        :param suit:
+        :param wing:
+        :return:
+        """
+        suit_cards: list[Card] = self.suits[suit]
+        last_card: Card
+        if wing < 0:
+            last_card = sorted(suit_cards)[0]
+        else:
+            last_card = sorted(suit_cards, reverse=True)[0]
+        return last_card

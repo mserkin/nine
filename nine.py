@@ -1,3 +1,4 @@
+import logging
 import sys
 from random import randrange
 from typing import Optional
@@ -85,27 +86,31 @@ def play():
 
             if player.kind == PlayerKind.COMPUTER:
                 print(f"Сейчас ход компьютерного игрока под именем {player.name}")
+                print(player.hand)
             else:
                 print(f"{player.name}, вот ваши карты:")
                 print(player.hand)
 
             card = player.move(board)
 
-            suits: dict[Suit, list[Card]] = player.hand.suits
-            suit_cards: list[Card] = suits[card.suit]
-            suit_cards.remove(card)
-            if len(suit_cards) == 0:
-                del suits[card.suit]
-            board.add(card)
-            if len(suits) == 0:
-                print(f"{player.name} победил, у него не осталось карт!")
-                print("Итоговое расположение карт на столе")
-                print(board)
-                print("Игра закончена!")
-                sys.exit(0)
+            if card:
+                suits: dict[Suit, list[Card]] = player.hand.suits
+                suit_cards: list[Card] = suits[card.suit]
+                suit_cards.remove(card)
+                if len(suit_cards) == 0:
+                    del suits[card.suit]
+                board.add(card)
+                if len(suits) == 0:
+                    print(f"{player.name} победил, у него не осталось карт!")
+                    print("Итоговое расположение карт на столе")
+                    print(board)
+                    print("Игра закончена!")
+                    sys.exit(0)
+
             break
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.INFO, filename="main.log", filemode="w")
     init()
     play()
