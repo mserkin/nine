@@ -71,25 +71,27 @@ class ComputerPlayer(Player):
         return others_cards
 
     def wing_estimation(self, card: Card, wing: int) -> int:
-        print(f"Estimating cart: {card}")
+        logging.debug(f"Estimating cart: {card.to_ascii_str()}")
         separated_found: bool
         count_to_end: int = card.rank.value - Rank.get_min().value if wing < 0 \
             else Rank.get_max().value - card.rank.value
         logging.debug(f"count_to_end: {count_to_end}")
         distance_to_last: int
+
         next_card: Optional[Card]
         is_last: bool
         next_card, is_last = self.have_next(card, wing)
-        logging.debug(f"next_card: {next_card}, is_last: {is_last}")
+        logging.debug(f"next_card: {next_card.to_ascii_str() if next_card else 'None'}, is_last: {is_last}")
+
         if is_last:
             return 0
         last_card: Card = self.hand.get_last(card.suit, wing)
-        logging.debug(f"last_card: {last_card}")
-        if card == last_card or next_card and card == next_card:
+        logging.debug(f"last_card: {last_card.to_ascii_str()}")
+        if last_card == card or next_card and last_card == next_card:
             separated_found = False
             distance_to_last = 0
         else:
-            separated_found = True
+            separated_found = self.is_separated(last_card, card, wing)
             distance_to_last = card.rank.value - last_card.rank.value if wing < 0 \
                 else last_card.rank.value - card.rank.value
         logging.debug(f"separated_found: {separated_found} distance_to_last: {distance_to_last}")
@@ -106,19 +108,15 @@ class ComputerPlayer(Player):
                 logging.debug("result is 0")
                 return 0
             else:
-                logging.debug(f"result is count_to_end: {count_to_end}")
-                return count_to_end
+                logging.debug(f"result is -count_to_end: {-count_to_end}")
+                return -count_to_end
 
-# - E: there is separated mine card in wing (1) or no (0)
-# - N: next is rival's (1) or players (0)
-# - D: distance to last mine
-# - C: count of cards to the end of a wing
-
-# parameters:
-# 2   3   4   5   6  [7]: N=1, E=0, D=0, R=0, C=5 (-5)
-# 2   3   4   5  [6] [7]: N=0, E=0, D=1, R=0, C=5 (0)
-# 2  [3]  4  [5]  6  [7]: N=1, E=1, D=4, R=2, C=5 (+4)
-# 2  [3] [4]  5   6  [7]: N=1, E=1, D=4, R=2, C=5 (+4)
-# 2  [3]  4   5  [6] [7]: N=0, E=1, D=4, R=2, C=5 (+4)
-# 2  [3]  4  [5] [6] [7]: N=0, E=1, D=4, R=1, C=5 (+4)
-# 2  [3] [4]  5  [6] [7]: N=0, E=1, D=4, R=1, C=5 (+4)
+    def is_separated(self, last_card: Card, card: Card, wing: int) -> bool:
+        for r in range(card.rank.value, last_card.rank.value, wing):
+            c: Card = Card(Rank(r), card.suit)
+            if c not in self.hand.suits[card.suit]:
+                logging.debug(f"Separation found - the card on someone other's hand {c.to_ascii_str()}")
+                return True
+        else:
+            logging.debug("Separation not found")
+            return False

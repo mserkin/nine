@@ -2,6 +2,7 @@ from enum import Enum
 from typing import Optional
 
 RANK_NAMES: list[str] = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "В", "Д", "К", "Т"]
+ASCII_RANK_NAMES: list[str] = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
 
 
 class Rank(Enum):
@@ -21,9 +22,9 @@ class Rank(Enum):
 
     @staticmethod
     def from_input(input_str: str) -> Optional['Rank']:
-        if input_str[0].upper() not in RANK_NAMES:
+        if input_str.strip().upper() not in RANK_NAMES:
             return None
-        return Rank(RANK_NAMES.index(input_str[0].upper()))
+        return Rank(RANK_NAMES.index(input_str.strip().upper()))
 
     @staticmethod
     def count() -> int:
@@ -64,6 +65,9 @@ class Rank(Enum):
 
     def __str__(self) -> str:
         return RANK_NAMES[self.value]
+
+    def to_ascii_str(self):
+        return ASCII_RANK_NAMES[self.value]
 
     def eval(self) -> int:
         evals = [7, 6, 5, 4, 3, 2, 1, 0, 3, 4, 5, 6, 7]
@@ -128,6 +132,10 @@ class Suit(Enum):
     """
     def __str__(self):
         names: list[str] = ["♤", "♧", "♢", "♡"]
+        return names[self.value]
+
+    def to_ascii_str(self):
+        names: list[str] = ["S", "C", "D", "H"]
         return names[self.value]
 
     @staticmethod

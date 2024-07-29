@@ -42,6 +42,9 @@ class Card:
     def __str__(self):
         return str(self.rank)+str(self.suit)
 
+    def to_ascii_str(self):
+        return self.rank.to_ascii_str() + self.suit.to_ascii_str()
+
     def get_prev(self):
         prev_rank: Optional[Rank] = self.rank.get_prev()
         if not prev_rank:

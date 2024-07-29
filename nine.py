@@ -111,6 +111,7 @@ def play():
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.INFO, filename="main.log", filemode="w")
+    logging.basicConfig(level=logging.DEBUG, filename="main.log", filemode="w")
+    logging.info("++++++++++++++ Started +++++++++++++")
     init()
     play()

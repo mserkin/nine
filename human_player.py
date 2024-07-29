@@ -46,13 +46,15 @@ class HumanPlayer(Player):
             card: Optional[Card] = self.input_card()
             if not card:
                 print("Пропуск хода")
-            if card.suit not in self.hand.suits or card not in self.hand.suits[card.suit]:
+
+            if card and (card.suit not in self.hand.suits or card not in self.hand.suits[card.suit]):
                 print("Хмммм, жульничать изволите? Да у вас нет такой карты!")
                 print("Попробуйте снова и не пытайтесь больше достать карту из рукова. Всё вижу!")
                 continue
 
-            if not board.fits_card(card):
+            if card and not board.fits_card(card):
                 print("Ни к селу, ни к городу... Вашу карту нельзя выложить на стол")
                 print("  Попробуйте снова и больше не пытайтесь пришивать кобыле хост.")
                 continue
+
             return card
