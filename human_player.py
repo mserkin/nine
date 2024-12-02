@@ -45,6 +45,12 @@ class HumanPlayer(Player):
         while True:
             card: Optional[Card] = self.input_card()
             if not card:
+                cards: list[Card] = super().get_playable_cards(board)
+                if cards:
+                    print("Пропускаете ход? Странно, вроде бы у вас есть карта, чтобы выложить на стол...")
+                    print("Попробуйте еще раз и даже не пытайтесь хитрить")
+                    continue
+
                 print("Пропуск хода")
 
             if card and (card.suit not in self.hand.suits or card not in self.hand.suits[card.suit]):
