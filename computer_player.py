@@ -10,7 +10,7 @@ from player import Player
 
 class ComputerPlayer(Player):
     def move(self, board: Board):
-        cards: list[Card] = self.get_playable_cards(board)
+        cards: list[Card] = super().get_playable_cards(board)
         card_dict: dict[Card, int] = {card: -100 for card in cards}
         for card in card_dict:
             estimate: int = self.estimate_card(card)
@@ -25,14 +25,6 @@ class ComputerPlayer(Player):
             return next(iter(cards_ordered))
         else:
             return None
-
-    def get_playable_cards(self, board: Board) -> list[Card]:
-        playable_cards: list[Card] = []
-        for suit, suit_cards in self.hand.suits.items():
-            for card in suit_cards:
-                if board.fits_card(card):
-                    playable_cards.append(card)
-        return playable_cards
 
     def estimate_card(self, card: Card) -> int:
         wing: int = card.rank.get_wing()
@@ -71,7 +63,7 @@ class ComputerPlayer(Player):
         return others_cards
 
     def wing_estimation(self, card: Card, wing: int) -> int:
-        logging.debug(f"Estimating cart: {card.to_ascii_str()}")
+        logging.debug(f"Estimating card: {card.to_ascii_str()}")
         separated_found: bool
         count_to_end: int = card.rank.value - Rank.get_min().value if wing < 0 \
             else Rank.get_max().value - card.rank.value
