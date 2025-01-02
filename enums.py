@@ -131,7 +131,7 @@ class Suit(Enum):
             return self.value != other.value
     """
     def __str__(self):
-        names: list[str] = ["♤", "♧", "♢", "♡"]
+        names: list[str] = ["(П)", "(Т)", "(Б)", "(Ч)"]
         return names[self.value]
 
     def to_ascii_str(self):

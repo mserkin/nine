@@ -65,8 +65,7 @@ class ComputerPlayer(Player):
     def wing_estimation(self, card: Card, wing: int) -> int:
         logging.debug(f"Estimating card: {card.to_ascii_str()}")
         separated_found: bool
-        count_to_end: int = card.rank.value - Rank.get_min().value if wing < 0 \
-            else Rank.get_max().value - card.rank.value
+        count_to_end: int = card.rank.value - Rank.get_min().value if wing < 0 else Rank.get_max().value - card.rank.value
         logging.debug(f"count_to_end: {count_to_end}")
         distance_to_last: int
 
