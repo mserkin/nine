@@ -7,6 +7,29 @@ from board import Board
 
 
 class HumanPlayer(Player):
+    def ask_card(self) -> Optional[Suit]:
+        while True:
+            card_str: str = input("Введите масть карты: П - пики, Т - трефы, Б - буби, Ч - черви, "
+                                  "0 - пропустить ход И достоинство карты: число от 2 до 10, или В - валет, Д - дама, К - король, Т - туз>")
+
+            if len(card_str) == 0:
+                print("Повторите!")
+                continue
+
+            if card_str[0] == '0':
+                return None            
+
+            card_str = card_str.strip()
+            suit: Suit = Suit.from_input(card_str[0])
+
+            rank = Rank.from_input(card_str[1:3])
+            if not rank or not suit:
+                print("Увы, вы ввели что-то не то. Попробуйте снова")
+                continue
+
+            return Card(rank, suit)    
+
+
     def input_suit(self) -> Optional[Suit]:
         while True:
             suit_str: str = input("Введите масть карты: П - пики, Т - трефы, Б - буби, Ч - черви, "
@@ -34,11 +57,7 @@ class HumanPlayer(Player):
             print("Увы, вы ввели что-то не то. Попробуйте снова")
 
     def input_card(self) -> Optional[Card]:
-        suit: Optional[Suit] = self.input_suit()
-        if not suit:
-            return None
-        rank: Rank = self.input_rank()
-        return Card(rank, suit)
+        return self.ask_card()
 
     def move(self, board: Board):
         print("Каким будет ваш ход?")

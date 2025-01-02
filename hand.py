@@ -32,12 +32,12 @@ class Hand:
     def __str__(self):
         str = ""
         for s in Suit:
+            str += s.__str__() + ':'          
             if s in self.suits:
-                str += s.__str__() + ':'
                 for c in self.suits[s]:
                     str += c.rank.__str__() + ','
                 str = str.removesuffix(',') + ';'
-                str += "\n"
+            str += "\n"
         return str
 
     def is_empty(self):

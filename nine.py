@@ -32,7 +32,17 @@ def deal(deck: Hand):
 
 
 def init():
-    player_count = int(input("Сколько игроков будет играть? >"))
+    while True:
+        player_count_str: str = input("Сколько игроков будет играть? >")
+
+        try:
+            player_count: int = int (player_count_str)
+        except ValueError:
+            print("Введите ЧИСЛО игроков")
+            continue
+        break 
+            
+
     for i in range(player_count):
         player_type_str: str = input(f"Игрок №{i + 1} человек? Да - Д, Нет - Н >")
         player_name: str = input(f"Введите имя игрока {i + 1} >")
@@ -69,7 +79,11 @@ def play():
         if turn_of_player == len(player_list):
             turn_of_player = 0
         player = player_list[turn_of_player]
-        if player.kind == PlayerKind.HUMAN:
+        human_players: int = 0
+        for pl in player_list:
+            if pl.kind == PlayerKind.HUMAN:
+                human_players += 1
+        if player.kind == PlayerKind.HUMAN and human_players > 1:
             print("\n" * 40)
             input(f"Теперь настала очередь ходить игроку {player.name}. Нажмите Enter")
         if card:
@@ -102,7 +116,7 @@ def play():
                 board.add(card)
                 if len(suits) == 0:
                     print(f"{player.name} победил, у него не осталось карт!")
-                    print("Итоговое расположение карт на столе")
+                    print("Итоговое расположение карт на столе:")
                     print(board)
                     print("Игра закончена!")
                     sys.exit(0)

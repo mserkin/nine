@@ -6,16 +6,17 @@ from hand import Hand
 class Board(Hand):
     def __str__(self):
         result: str = ""
-        for s in Suit:
+        for s in Suit:           
+            result += s.__str__() + ':'
+            
             if s in self.suits:
                 suit_cards = self.suits[s]
-                result += s.__str__() + ':'
                 for rank in Rank:
                     card_str = "  "
                     if Card(rank, s) in suit_cards:
                         card_str = rank.__str__().rjust(2, ' ')
                     result += card_str + ' '
-                result += "\n"
+            result += "\n"
         return result
 
     def fits_card(self, card: Card):
